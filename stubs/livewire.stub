@@ -1,0 +1,33 @@
+<?php
+
+namespace [namespace];
+
+use Livewire\Component;
+use App\Traits\PublicFunction;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+use App\Traits\Alert;
+class [class] extends Component
+{
+ use WithFileUploads,Alert,PublicFunction,WithPagination;
+    public $title = "";
+        public $columes;
+        public $page_length = 10;
+        public $search ;
+        public $model_title="";
+        public $sortBy="created_at";
+        public $sortDirection="desc";
+        protected $listeners = ['governorate-livewire:conformDelete' => 'conformDelete'];
+
+
+       public function render()
+       {
+
+           if(in_array(''||'',$this->actions_permission()) ) {
+             return view('dashboard')->extends('dashboard_layout.main');
+               }else{
+                return view('dashboard.not-authorized')->extends('dashboard_layout.main');
+                }
+       }
+   }
+

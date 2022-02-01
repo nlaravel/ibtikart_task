@@ -1,0 +1,55 @@
+<?php
+
+namespace [namespace];
+
+use Livewire\Component;
+use App\Traits\PublicFunction;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+use App\Traits\Alert;
+use App\Models\[model];
+class [class] extends Component
+{
+     use WithFileUploads,Alert,PublicFunction;
+      public $title = "";
+      public $file_name = '[model_name]';
+      public $[model_name];
+      public $image;
+      protected $listeners = ['[model]-livewire:conformDelete' => 'conformDelete','reviewSectionRefresh' => '$refresh',];
+       protected $rules = [
+                [model_col]
+       ];
+
+       protected $validationAttributes;
+       public function __construct($id = null)
+       {
+           parent::__construct($id);
+           $this->validationAttributes = $this->getColNameForValidation([model]::getColumnLang());
+       }
+      public function mount($id =null)
+          {
+              $this->title = \Lang::get('lang.add_account')  ;
+              $this->[model_name]  = $id?[model]::find($id):new [model]();
+          }
+      public function render()
+          {
+              return view('[view]')->extends('dashboard_layout.main');
+          }
+
+      public function save(){
+            $this->validate();
+           \DB::beginTransaction();
+           try {
+               $this->[model_name]->save();
+                \DB::commit();
+               $this->showModal(\Lang::get('lang.saved_done'),\Lang::get('lang.saved_changed'),'success');
+               return redirect()->route('dashboard.[model_name]');
+            } catch (\Exception $e) {
+                    \DB::rollback();
+                    $this->showModal('حصل خطأ ما',$e->getMessage(),'error');
+            }
+       }
+
+}
+
+
